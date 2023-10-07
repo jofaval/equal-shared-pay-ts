@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Equal Pay</title>
+    <link rel="stylesheet" href="./public/main.css" />
+  </head>
+
+  <body>
+    <template id="payee-template">
+      <div class="">
+        <caption>
+          Payee
+        </caption>
+
+        <div class="payee-name__container">
+          <label for="">Name:</label>
+          <input type="text" name="" />
+        </div>
+
+        <div class="payee-income__container">
+          <label for="">Income:</label>
+          <input type="number" name="" required />
+        </div>
+      </div>
+    </template>
+
+    <div id="result"></div>
+
+    <form id="equalPayForm">
+      <div id="equalPayFormPayees"></div>
+
+      <input type="submit" value="Get value" />
+    </form>
+  </body>
+
+  <script src="./src/form-handler.js"></script>
+  <script src="./src/main.js"></script>
+</html>

@@ -1,0 +1,3 @@
+- [ ] Add tests (check that the percentage of all the payees is with within the same number with some margin of error)
+- [ ] Allow multiple payees at the form inputs
+- [ ] Evaluate if it might be worth it to add Vite
