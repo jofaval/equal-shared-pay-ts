@@ -34,7 +34,7 @@ function isEveryIncomeEqual(incomes) {
  * }}
  */
 function getHighestAndLowestIncomes(incomes) {
-  const sorted = incomes.sort();
+  const sorted = incomes.sort((a, b) => a - b);
 
   return { highest: sorted.at(-1), lowest: sorted[0] };
 }
@@ -70,14 +70,13 @@ function getHighestAndLowestPercentages({ highest, lowest, amount }) {
  */
 function getTotalDeviation({ incomes, percentage, amount }) {
   const totalPayout = incomes.reduce((acc, curr) => {
-    return Big(acc).plus(Big(curr).mul(percentage));
-  }, Big(0));
+    return acc + curr * percentage;
+  }, 0);
 
-  return Big(amount).minus(Big(totalPayout));
+  return amount - totalPayout;
 }
 
-const MAX_DEVIATION = Big(1);
-const MAX_ITERATION = 1_000;
+const MAX_DEVIATION = 0.001;
 
 /**
  * @param {{
@@ -95,43 +94,34 @@ function getActualEqualPay({ rawIncomes, amount }) {
   const { highestPercentage, lowestPercentage } =
     getHighestAndLowestPercentages({ amount, highest, lowest });
 
-  const difference = Big((highestPercentage - lowestPercentage) / 2);
-  const startingPercentage = Big(lowestPercentage).plus(difference);
-
   let prev = {
-    percentage: Big(highestPercentage),
-    deviation: Big(Number.MAX_SAFE_INTEGER),
+    percentage: highestPercentage,
+    deviation: Number.MAX_SAFE_INTEGER,
   };
 
   let curr = {
-    percentage: startingPercentage,
+    percentage: 0,
     deviation: getTotalDeviation({
       amount,
       incomes,
-      percentage: startingPercentage,
+      percentage: 0,
     }),
   };
 
-  let step = difference;
+  const increment = 0.0000001;
   let iteration = 0;
-  while (Math.abs(curr.deviation) > MAX_DEVIATION) {
+  while (
+    Math.abs(curr.deviation) > MAX_DEVIATION &&
+    curr.percentage < highestPercentage &&
+    Math.abs(prev.deviation) > Math.abs(curr.deviation)
+  ) {
     iteration++;
-    if (iteration > MAX_ITERATION) {
-      break;
-    }
-
-    // console.log({ step }, curr, prev);
-    const a = Big(1);
-    if (
-      Math.abs(curr.deviation.toNumber()) >= Math.abs(prev.deviation.toNumber())
-    ) {
-      step = Big(0.9).mul(step);
-    }
 
     const aux = { ...curr };
-    curr.percentage = Big(lowestPercentage).plus(step);
+    curr.percentage = iteration * increment;
     prev = aux;
 
+    // console.log(prev, curr);
     curr.deviation = getTotalDeviation({
       amount,
       incomes,
@@ -139,7 +129,7 @@ function getActualEqualPay({ rawIncomes, amount }) {
     });
   }
 
-  return curr.percentage.toPrecision();
+  return curr.percentage;
 }
 
 // TODO: implement income-name pairing
@@ -167,7 +157,6 @@ function getEqualPay({ incomes, amount }) {
   return getActualEqualPay({ amount, rawIncomes: incomes });
 }
 
-// local tests
-const incomes = [1500, 2400, 5000];
-const r = getEqualPay({ incomes, amount: 50 });
-console.log({ r, incomes: incomes.reduce((acc, curr) => acc + curr * r, 0) });
+module.exports = {
+  getEqualPay,
+};
