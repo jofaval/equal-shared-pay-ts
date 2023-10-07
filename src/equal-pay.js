@@ -77,6 +77,25 @@ function getTotalDeviation({ incomes, percentage, amount }) {
 }
 
 const MAX_DEVIATION = 0.001;
+const INCREMENT_STEP = 0.0000001;
+
+/**
+ *
+ * @param {{
+ *   curr: { deviation: number, percentage: number },
+ *   highestPercentage: number,
+ *   prev : { deviation: number, percentage: number }
+ * }}
+ *
+ * @returns
+ */
+function isProcessing({ curr, highestPercentage, prev }) {
+  const reachable = curr.percentage < highestPercentage;
+  const hasNotOverpassedDeviation = Math.abs(curr.deviation) > MAX_DEVIATION;
+  const isImproving = Math.abs(prev.deviation) > Math.abs(curr.deviation);
+
+  return reachable && hasNotOverpassedDeviation && isImproving;
+}
 
 /**
  * @param {{
@@ -91,15 +110,18 @@ function getActualEqualPay({ rawIncomes, amount }) {
   const incomes = Array.from(new Set(rawIncomes));
 
   const { highest, lowest } = getHighestAndLowestIncomes(incomes);
-  const { highestPercentage, lowestPercentage } =
-    getHighestAndLowestPercentages({ amount, highest, lowest });
+  const { highestPercentage } = getHighestAndLowestPercentages({
+    amount,
+    highest,
+    lowest,
+  });
 
   let prev = {
     percentage: highestPercentage,
     deviation: Number.MAX_SAFE_INTEGER,
   };
 
-  let curr = {
+  const curr = {
     percentage: 0,
     deviation: getTotalDeviation({
       amount,
@@ -108,20 +130,12 @@ function getActualEqualPay({ rawIncomes, amount }) {
     }),
   };
 
-  const increment = 0.0000001;
   let iteration = 0;
-  while (
-    Math.abs(curr.deviation) > MAX_DEVIATION &&
-    curr.percentage < highestPercentage &&
-    Math.abs(prev.deviation) > Math.abs(curr.deviation)
-  ) {
+  while (isProcessing({ curr, highestPercentage, prev })) {
     iteration++;
+    prev = { ...curr };
 
-    const aux = { ...curr };
-    curr.percentage = iteration * increment;
-    prev = aux;
-
-    // console.log(prev, curr);
+    curr.percentage = iteration * INCREMENT_STEP;
     curr.deviation = getTotalDeviation({
       amount,
       incomes,

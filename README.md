@@ -26,7 +26,7 @@ Why should someone with **lower** income be putting **more** percentage for some
 
 I've chosen a web stack so that it can actually be hosted almost everywhere without an actual cost
 
-- TypeScript
+- JSDoc
 - Tailwind
 - Github Actions & Pages
 
