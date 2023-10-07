@@ -9,17 +9,17 @@
 
   <body>
     <template id="payee-template">
-      <div class="">
+      <div class="payee">
         <caption>
           Payee
         </caption>
 
-        <div class="payee-name__container">
+        <div class="payee-name__container payee-container">
           <label for="">Name:</label>
           <input type="text" name="" />
         </div>
 
-        <div class="payee-income__container">
+        <div class="payee-income__container payee-container">
           <label for="">Income:</label>
           <input type="number" name="" required />
         </div>
@@ -28,8 +28,15 @@
 
     <div id="result"></div>
 
-    <form id="equalPayForm">
-      <div id="equalPayFormPayees"></div>
+    <button id="addPayeeButton">+ Add payee</button>
+
+    <form id="equalPayForm" class="payee-form">
+      <div class="payee-name__container payee-container">
+        <label for="amount">Amount:</label>
+        <input type="number" name="amount" />
+      </div>
+
+      <div id="equalPayFormPayees" class="payee-form__elements"></div>
 
       <input type="submit" value="Get value" />
     </form>

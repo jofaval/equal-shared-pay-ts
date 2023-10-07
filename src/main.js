@@ -63,11 +63,17 @@ function generatePayee() {
   return payee;
 }
 
-function formGeneration() {
+function appendPayee() {
   const form = document.getElementById("equalPayFormPayees");
+  form.appendChild(generatePayee());
+}
 
-  form.appendChild(generatePayee());
-  form.appendChild(generatePayee());
+function formGeneration() {
+  appendPayee();
+  appendPayee();
+
+  const addPayeeButton = document.getElementById("addPayeeButton");
+  addPayeeButton.onclick = appendPayee;
 }
 
 (() => {
