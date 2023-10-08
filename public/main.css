@@ -45,6 +45,14 @@ button {
   padding: 0.25rem 0.75rem;
 }
 
+body.form #tab-form {
+  font-weight: bold;
+}
+
+body.result #tab-result {
+  font-weight: bold;
+}
+
 body:not(.form) form {
   display: none;
 }
