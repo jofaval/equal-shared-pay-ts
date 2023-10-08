@@ -81,14 +81,14 @@ const INCREMENT_STEP = 0.0000001;
  *
  * @param {{
  *   curr: { deviation: number, percentage: number },
- *   highestPercentage: number,
+ *   lowestPercentage: number,
  *   prev : { deviation: number, percentage: number }
  * }}
  *
  * @returns
  */
-function isProcessing({ curr, highestPercentage, prev }) {
-  const reachable = curr.percentage < highestPercentage;
+function isProcessing({ curr, lowestPercentage, prev }) {
+  const reachable = curr.percentage < lowestPercentage;
   const hasNotOverpassedDeviation = Math.abs(curr.deviation) > MAX_DEVIATION;
   const isImproving = Math.abs(prev.deviation) > Math.abs(curr.deviation);
 
@@ -108,14 +108,14 @@ function getActualEqualPay({ rawIncomes, amount }) {
   const incomes = Array.from(new Set(rawIncomes));
 
   const { highest, lowest } = getHighestAndLowestIncomes(incomes);
-  const { highestPercentage } = getHighestAndLowestPercentages({
+  const { lowestPercentage } = getHighestAndLowestPercentages({
     amount,
     highest,
     lowest,
   });
 
   let prev = {
-    percentage: highestPercentage,
+    percentage: lowestPercentage,
     deviation: Number.MAX_SAFE_INTEGER,
   };
 
@@ -129,7 +129,7 @@ function getActualEqualPay({ rawIncomes, amount }) {
   };
 
   let iteration = 0;
-  while (isProcessing({ curr, highestPercentage, prev })) {
+  while (isProcessing({ curr, lowestPercentage, prev })) {
     iteration++;
     prev = { ...curr };
 
