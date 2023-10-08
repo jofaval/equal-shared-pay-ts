@@ -9,7 +9,7 @@
     <script src="./src/ui-utilities.js"></script>
   </head>
 
-  <body>
+  <body class="form">
     <template id="payee-template">
       <div class="payee">
         <caption>
@@ -18,7 +18,7 @@
 
         <div class="payee-name__container payee-container">
           <label for="">Name:</label>
-          <input type="text" name="" />
+          <input type="text" name="" required />
         </div>
 
         <div class="payee-income__container payee-container">
@@ -27,6 +27,11 @@
         </div>
       </div>
     </template>
+
+    <div class="tabs">
+      <button class="tab" onclick="onFormTabClick()">Form</button>
+      <button class="tab" onclick="onResultTabClick()">Result</button>
+    </div>
 
     <div id="result"></div>
 
@@ -40,9 +45,21 @@
 
       <div id="equalPayFormPayees" class="payee-form__elements"></div>
 
-      <input type="submit" value="Get value" />
+      <input type="submit" value="O Get value" />
     </form>
   </body>
+
+  <script>
+    function onFormTabClick() {
+      document.body.classList.add("form");
+      document.body.classList.remove("result");
+    }
+
+    function onResultTabClick() {
+      document.body.classList.add("result");
+      document.body.classList.remove("form");
+    }
+  </script>
 
   <script src="./src/form-handler.js" type="module"></script>
   <script src="./src/main.js"></script>

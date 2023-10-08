@@ -22,6 +22,33 @@ body {
   flex-direction: column;
 }
 
+button {
+  cursor: pointer;
+}
+
+.tabs {
+  padding: 1rem;
+  margin: 1rem;
+
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.3);
+
+  width: 350px;
+}
+
+.tab {
+  background: transparent;
+  outline: none;
+  border: none;
+
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.3);
+
+  padding: 0.25rem 0.75rem;
+}
+
+body:not(.form) form {
+  display: none;
+}
+
 form {
   display: flex;
   flex-direction: column;
@@ -62,4 +89,12 @@ form caption {
 
 .payee-container input {
   flex: 1;
+}
+
+#result {
+  max-width: 350px;
+}
+
+body:not(.result) #result {
+  display: none;
 }

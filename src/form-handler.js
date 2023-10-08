@@ -52,6 +52,8 @@ function printResult({ amount, deviance, payees, percentage }) {
         .join("")}
     </div>
   </div>`;
+
+  onResultTabClick();
 }
 
 /**
@@ -70,15 +72,19 @@ function handleEqualPayFormSubmit(evt) {
   const [[, amount]] = formData.entries();
   const incomes = parsed.map(([, income]) => income);
 
-  const percentage = getEqualPay({ amount, incomes });
-  const deviance = getTotalDeviation({ amount, incomes, percentage });
+  try {
+    const percentage = getEqualPay({ amount, incomes });
+    const deviance = getTotalDeviation({ amount, incomes, percentage });
 
-  const payeesWithFee = parsed.map(([name, value]) => [
-    name,
-    value * percentage,
-  ]);
+    const payeesWithFee = parsed.map(([name, value]) => [
+      name,
+      value * percentage,
+    ]);
 
-  printResult({ amount, deviance, payees: payeesWithFee, percentage });
+    printResult({ amount, deviance, payees: payeesWithFee, percentage });
+  } catch (error) {
+    alert(error);
+  }
 
   return false;
 }

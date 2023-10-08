@@ -32,7 +32,7 @@ function generatePayeeNative(template) {
   cloned.querySelector(".payee").prepend(
     generateButton({
       id: `remove-payee-${payeeIndex}`,
-      innerHTML: "Remove Payee",
+      innerHTML: "X Remove Payee",
       /**
        * @param {Parameters<HTMLButtonElement["onclick"]>[0]} evt
        */
