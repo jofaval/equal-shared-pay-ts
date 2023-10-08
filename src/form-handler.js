@@ -54,17 +54,7 @@ function printResult({ amount, deviance, payees, percentage }) {
   </div>`;
 }
 
-/**
- * @param {SubmitEvent} evt
- */
-function handleEqualPayFormSubmit(evt) {
-  const event = evt || window.event;
-  event.preventDefault();
-
-  onResultTabClick();
-  const result = document.getElementById("result");
-  result.innerHTML = "Mathematicating...";
-
+function processFormData() {
   const formData = new FormData(document.forms[EQUAL_PAY_FORM_ID]);
   const parsed = parseFormData(formData);
 
@@ -84,6 +74,20 @@ function handleEqualPayFormSubmit(evt) {
   } catch (error) {
     alert(error);
   }
+}
+
+/**
+ * @param {SubmitEvent} evt
+ */
+function handleEqualPayFormSubmit(evt) {
+  const event = evt || window.event;
+  event.preventDefault();
+
+  onResultTabClick();
+  const result = document.getElementById("result");
+  result.innerHTML = "Mathematicating...";
+
+  setTimeout(processFormData, 0);
 
   return false;
 }
