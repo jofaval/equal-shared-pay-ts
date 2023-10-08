@@ -52,8 +52,6 @@ function printResult({ amount, deviance, payees, percentage }) {
         .join("")}
     </div>
   </div>`;
-
-  onResultTabClick();
 }
 
 /**
@@ -63,6 +61,7 @@ function handleEqualPayFormSubmit(evt) {
   const event = evt || window.event;
   event.preventDefault();
 
+  onResultTabClick();
   const result = document.getElementById("result");
   result.innerHTML = "Mathematicating...";
 
