@@ -114,6 +114,8 @@ function getActualEqualPay({ rawIncomes, amount }) {
     lowest,
   });
 
+  const initial = lowestPercentage / incomes.length;
+
   let prev = {
     percentage: lowestPercentage,
     deviation: Number.MAX_SAFE_INTEGER,
@@ -133,7 +135,7 @@ function getActualEqualPay({ rawIncomes, amount }) {
     iteration++;
     prev = { ...curr };
 
-    curr.percentage = iteration * INCREMENT_STEP;
+    curr.percentage = initial + iteration * INCREMENT_STEP;
     curr.deviation = getTotalDeviation({
       amount,
       incomes,

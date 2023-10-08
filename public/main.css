@@ -22,7 +22,8 @@ body {
   flex-direction: column;
 }
 
-button {
+button,
+input[type="submit"] {
   cursor: pointer;
 }
 
