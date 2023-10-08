@@ -1,5 +1,3 @@
-const Big = require("big.js");
-
 /**
  * @param {number[]} incomes
  * @returns {boolean}
@@ -68,7 +66,7 @@ function getHighestAndLowestPercentages({ highest, lowest, amount }) {
  *
  * @returns {number}
  */
-function getTotalDeviation({ incomes, percentage, amount }) {
+export function getTotalDeviation({ incomes, percentage, amount }) {
   const totalPayout = incomes.reduce((acc, curr) => {
     return acc + curr * percentage;
   }, 0);
@@ -146,9 +144,6 @@ function getActualEqualPay({ rawIncomes, amount }) {
   return curr.percentage;
 }
 
-// TODO: implement income-name pairing
-// Hashmap, implement that on the result side
-
 /**
  *
  * @param {{
@@ -158,7 +153,7 @@ function getActualEqualPay({ rawIncomes, amount }) {
  *
  * @returns {number[] | boolean}
  */
-function getEqualPay({ incomes, amount }) {
+export function getEqualPay({ incomes, amount }) {
   const invalidIncomes = !areValidIncomes(incomes);
   if (invalidIncomes) {
     return false;
@@ -171,6 +166,6 @@ function getEqualPay({ incomes, amount }) {
   return getActualEqualPay({ amount, rawIncomes: incomes });
 }
 
-module.exports = {
-  getEqualPay,
-};
+// module.exports = {
+//   getEqualPay,
+// };
