@@ -26,6 +26,23 @@ function parseFormData(formData) {
 }
 
 /**
+ *
+ * @param {[string, number, number]}
+ */
+function printPayeeResult([name, income, payout]) {
+  const parsedPayout = Number(payout.toFixed(2));
+
+  const remaining = Number((income - parsedPayout).toFixed(2));
+  const remainingColor =
+    remaining !== 0 ? `color: ${remaining > 0 ? "green" : "red"};` : "";
+
+  return `<p>
+    ${name} has to pay ${boldifyInline(parsedPayout)},
+    with ${boldifyInline(remaining, remainingColor)} remaining
+  </p>`;
+}
+
+/**
  * @param {{
  *   amount: number,
  *   deviance: number,
@@ -37,40 +54,37 @@ function printResult({ amount, deviance, payees, percentage }) {
   const result = document.getElementById("result");
   const fixedPercentage = (percentage * 100).toFixed(2);
 
+  const payeesWithFee = payees.map(([name, value]) => [
+    name,
+    value,
+    value * percentage,
+  ]);
+
   result.innerHTML = `<div>
-    <p>Wanted to pay ${amount}, everyone will pay ${fixedPercentage}% of their income</p>
+    <p>Wanted to pay ${boldifyInline(
+      amount
+    )}, everyone will pay ${boldifyInline(fixedPercentage)}% of their income</p>
     <p>absolute error of ${deviance}</p>
 
     <h3>Payees</h3>
     <div>
-      ${payees
-        .map(
-          ([name, payout]) => `<p>
-        ${name} has to pay ${payout.toFixed(2)}
-      </p>`
-        )
-        .join("")}
+      ${payeesWithFee.map(printPayeeResult).join("")}
     </div>
   </div>`;
 }
 
 function processFormData() {
   const formData = new FormData(document.forms[EQUAL_PAY_FORM_ID]);
-  const parsed = parseFormData(formData);
+  const payees = parseFormData(formData);
 
   const [[, amount]] = formData.entries();
-  const incomes = parsed.map(([, income]) => income);
+  const incomes = payees.map(([, income]) => income);
 
   try {
     const percentage = getEqualPay({ amount, incomes });
     const deviance = getTotalDeviation({ amount, incomes, percentage });
 
-    const payeesWithFee = parsed.map(([name, value]) => [
-      name,
-      value * percentage,
-    ]);
-
-    printResult({ amount, deviance, payees: payeesWithFee, percentage });
+    printResult({ amount, deviance, payees, percentage });
   } catch (error) {
     alert(error);
   }

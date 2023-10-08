@@ -12,3 +12,10 @@ function generateButton(props) {
 
   return button;
 }
+
+/**
+ * @param {string?} style
+ */
+function boldifyInline(content, style) {
+  return `<span style="font-weight: bold; ${style}">${content}</span>`;
+}
